@@ -1,0 +1,10 @@
+define([
+    'configuration'
+], function (configuration) {
+
+    
+    
+});
+
+
+
