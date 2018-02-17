@@ -1,14 +1,11 @@
 var requireConfig = {
     "map": {},
     "paths": {
-        "FirstModule": [
-            "./app_components/first-module/amd-first.module"
+        "vue": [
+            "../node_modules/vue/dist/vue"
         ],
-        "SecondModule": [
-            "./app_components/second-module/amd-second.module"
-        ],
-        "NBCoreModule": [
-            "./app_components/nb-core/nb-core.module"
+        "axios": [
+            "../node_modules/axios/dist/axios"
         ]
     },
     "deps": [

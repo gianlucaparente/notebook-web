@@ -1,15 +1,17 @@
 <!doctype html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <title>Modules Example</title>
+<head>
+    <meta charset="utf-8">
+    <title>Modules Example</title>
 
-        <script data-main="./src/requirejs.config.js" src="node_modules/requirejs/require.js"></script>
+    <script data-main="./src/requirejs.config.js" src="node_modules/requirejs/require.js"></script>
 
-    </head>
-    <body>
+</head>
+<body>
 
-        <div>It Works!</div>
+<div id="app">
+    <note-list v-bind:notes='notes'></note-list>
+</div>
 
-    </body>
+</body>
 </html>
