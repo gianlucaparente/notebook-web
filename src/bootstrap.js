@@ -8,10 +8,22 @@ define([
         .then(response => {
 
             vue.component('note-list', {
-                props: ['notes'],
+                props: ['notes', 'expired'],
                 template: "<table border='1' cellpadding='5' cellspacing='5'>" +
-                "<note-item v-for='note in notes' v-bind:note='note' v-bind:key='note.id'></note-item>" +
-                "</table>"
+                "<note-item v-for='note in filterNoteList(expired)' v-bind:note='note' v-bind:key='note.id'></note-item>" +
+                "</table>",
+                methods: {
+                    filterNoteList: function(expired) {
+
+                        if (expired === undefined) {
+                            return this.notes;
+                        }
+
+                        return this.notes.filter(function (note) {
+                            return note.expired === expired;
+                        });
+                    }
+                }
             });
 
             vue.component('note-item', {
