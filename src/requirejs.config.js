@@ -2,10 +2,13 @@ var requireConfig = {
     "map": {},
     "paths": {
         "vue": [
-            "../node_modules/vue/dist/vue"
+            "components/vue/dist/vue"
         ],
         "axios": [
-            "../node_modules/axios/dist/axios"
+            "components/axios/dist/axios"
+        ],
+        "grunt": [
+            "../node_modules/grunt/lib/grunt"
         ]
     },
     "deps": [

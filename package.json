@@ -4,14 +4,22 @@
   "description": "Safe notebook for your appoiments",
   "author": "Gianluca Parente",
   "license": "MIT",
-  "devDependencies": {},
+  "devDependencies": {
+    "grunt": "^1.0.2",
+    "grunt-contrib-clean": "^1.1.0",
+    "grunt-contrib-connect": "^1.0.2",
+    "grunt-contrib-copy": "^1.0.0",
+    "grunt-contrib-jshint": "^1.1.0",
+    "grunt-contrib-nodeunit": "^1.0.0",
+    "grunt-contrib-uglify-es": "^3.3.0",
+    "grunt-contrib-watch": "^1.0.0"
+  },
   "scripts": {
     "prestart": "npm install",
     "start": "http-server ./ -a localhost -p 8000 -c-1"
   },
   "dependencies": {
     "axios": "^0.17.1",
-    "http-server": "0.9.0",
     "requirejs": "2.3.5",
     "vue": "^2.5.13"
   }

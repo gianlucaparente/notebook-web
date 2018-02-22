@@ -8,8 +8,8 @@ define([
     vue.component('note-list', NoteList);
     vue.component('note-item', NoteItem);
 
-    axios.get(`http://localhost:8080/notes`)
-        .then(response => {
+    axios.get("http://localhost:8080/notes")
+        .then((response) => {
 
             var app = new vue({
                 el: '#app',
@@ -19,9 +19,9 @@ define([
             });
 
         })
-        .catch(e => {
+        .catch((e) => {
             console.log(e);
-        })
+        });
     
 });
 
