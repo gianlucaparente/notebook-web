@@ -12,7 +12,7 @@ var requireConfig = {
         ]
     },
     "deps": [
-        "./bootstrap"
+        "./components/notebook/notebook.app"
     ]
 };
 
