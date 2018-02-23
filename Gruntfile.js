@@ -15,6 +15,20 @@ module.exports = function(grunt) {
             },
             files: { src: 'src/**/*.js', filter: 'isFile' }
         },
+        sass: {
+            dev: {
+                options: {
+                    trace: true
+                },
+                files: [{
+                    expand: true,
+                    src: ['**.scss'],
+                    dest: 'dev',
+                    cwd: 'src',
+                    ext: '.css'
+                }]
+            }
+        },
         clean: {
             dev: { src: 'dev' },
             dist: { src: 'dist' }
@@ -28,7 +42,7 @@ module.exports = function(grunt) {
             },
             dev: {
                 expand: true,
-                src: ['**'],
+                src: ['**', '!**.scss'],
                 dest: 'dev',
                 cwd: 'src'
             },
@@ -50,15 +64,18 @@ module.exports = function(grunt) {
             server: {
                 options: {
                     base: "./dev",
-                    livereload: true,
-                    open: true
+                    open: true,
+                    livereload: true
                 }
             }
         },
         watch: {
             scripts: {
-                files: ['src/**/*.js'],
-                tasks: ['jshint', 'copyAssets']
+                options: {
+                    livereload: true
+                },
+                files: ['src/**/*'],
+                tasks: ['clean:dev', 'compile', 'copyAssets']
             }
         }
     });
@@ -67,9 +84,9 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-uglify-es');
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-copy');
-
     grunt.loadNpmTasks('grunt-contrib-connect');
     grunt.loadNpmTasks('grunt-contrib-watch');
+    grunt.loadNpmTasks('grunt-contrib-sass');
     
     // Copy Task
     grunt.registerTask('copyAssets', ['copy:dependencies', 'copy:dev']);
@@ -77,8 +94,11 @@ module.exports = function(grunt) {
     // Start Server Task
     grunt.registerTask('startServer', ['connect:server', 'watch']);
 
+    // Compile Task
+    grunt.registerTask('compile', ['jshint', 'sass']);
+
     // Build Tasks
-    grunt.registerTask('dev', ['clean:dev', 'jshint', 'copyAssets', 'startServer']);
+    grunt.registerTask('dev', ['clean:dev', 'compile', 'copyAssets', 'startServer']);
     // grunt.registerTask('dist', ['clean:dist', 'jshint', 'copy:dist', 'uglify', 'copyAssets', 'watch']);
 
     // Custom Tasks
