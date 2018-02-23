@@ -50,21 +50,15 @@ module.exports = function(grunt) {
             server: {
                 options: {
                     base: "./dev",
-                    open: true,
                     livereload: true,
-                    onCreateServer: function(server, connect, options) {
-                        grunt.log.writeln("Server up and running..");
-                    }
+                    open: true
                 }
             }
         },
         watch: {
             scripts: {
-                files: ['**/*.js'],
-                tasks: ['jshint'],
-                options: {
-                    spawn: false
-                }
+                files: ['src/**/*.js'],
+                tasks: ['jshint', 'copyAssets']
             }
         }
     });
@@ -76,12 +70,12 @@ module.exports = function(grunt) {
 
     grunt.loadNpmTasks('grunt-contrib-connect');
     grunt.loadNpmTasks('grunt-contrib-watch');
-
+    
     // Copy Task
     grunt.registerTask('copyAssets', ['copy:dependencies', 'copy:dev']);
 
     // Start Server Task
-    grunt.registerTask('startServer', ['connect:server:keepalive', 'watch']);
+    grunt.registerTask('startServer', ['connect:server', 'watch']);
 
     // Build Tasks
     grunt.registerTask('dev', ['clean:dev', 'jshint', 'copyAssets', 'startServer']);

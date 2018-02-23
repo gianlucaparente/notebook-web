@@ -19,5 +19,5 @@ let NoteList = {
 };
 
 define([], function() {
-    return NoteList;    
+    return NoteList;
 });

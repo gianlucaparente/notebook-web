@@ -1,6 +1,6 @@
 var requireConfig = {
-    "map": {},
-    "paths": {
+    map: {},
+    paths: {
         "vue": [
             "components/vue/dist/vue"
         ],
@@ -11,9 +11,7 @@ var requireConfig = {
             "../node_modules/grunt/lib/grunt"
         ]
     },
-    "deps": [
-        "./components/notebook/notebook.app"
-    ]
+    deps: ["components/notebook/notebook.app"]
 };
 
 requirejs.config(requireConfig);

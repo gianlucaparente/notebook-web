@@ -15,3 +15,4 @@ let NoteItem = {
 define([], function() {
     return NoteItem;
 });
+ 
