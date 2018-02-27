@@ -1,13 +1,13 @@
 <template>
   <div class='Notebook'>
-    <p>Your Notes:</p>
+    <h2>Your Notes:</h2>
     <note-list v-bind:notes='notes' v-bind:expired="false"></note-list>
-    <p>Expired Notes:</p>
+    <h2>Expired Notes:</h2>
     <note-list v-bind:notes='notes' v-bind:expired="true"></note-list>
   </div>
 </template>
 
-<script>
+<script type="text/babel">
 import NoteList from '@/components/NoteList/NoteList';
 import NoteItem from '@/components/NoteItem/NoteItem';
 import Axios from 'axios';
@@ -41,7 +41,7 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style scoped lang="scss" rel="stylesheet/scss">
 h1, h2 {
   font-weight: normal;
 }

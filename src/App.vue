@@ -1,9 +1,11 @@
 <template>
   <div id="app">
-    <header>
-      <img src="./assets/logo.png">
-      <h1>{{ welcome }}</h1>
+
+    <header class="Header">
+      <img width="100" height="100" src="./assets/logo.png">
+      <h1 class="Header__title">{{ welcome }}</h1>
     </header>
+
     <content>
       <router-view/>
     </content>
@@ -14,7 +16,7 @@
 
 </template>
 
-<script>
+<script type="text/babel">
   export default {
     name: 'App',
     data() {
@@ -25,21 +27,34 @@
   }
 </script>
 
-<style>
-  header {
-    display: flex;
+<style lang="scss" rel="stylesheet/scss">
+
+  body {
+
+    background-color: #fafafa;
+
   }
 
-  header #app {
+  #app {
     font-family: 'Avenir', Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    text-align: center;
     color: #2c3e50;
-    margin-top: 60px;
+
+    .Header {
+      display: flex;
+      height: 100px;
+      align-items: center;
+
+      &__title {
+        margin: 0 0 0 10px;
+        font-size: 32px;
+      }
+
+      img {  }
+
+    }
+
   }
 
-  header #app img {
-    width: 100px;
-  }
 </style>
