@@ -1,7 +1,8 @@
 <template>
-  <div class='NoteList'>
+  <div class='NoteList' v-if="haveNotes || emptyMessage">
+    <h2>{{ title }}</h2>
     <note-item v-if="haveNotes" v-for='note in calculatedNotes' v-bind:note='note' v-bind:key='note.id'></note-item>
-    <div v-if="!haveNotes">No have notes.</div>
+    <div v-if="!haveNotes">{{ emptyMessage }}</div>
   </div>
 </template>
 
@@ -9,7 +10,12 @@
 import NoteItem from '@/components/NoteItem/NoteItem'
 export default {
   name: 'NoteList',
-  props: ['notes', 'expired'],
+  props: [
+    'notes',
+    'expired',
+    'title',
+    'emptyMessage'
+  ],
   computed: {
       calculatedNotes: function() {
         return this.filterNoteList(this.expired);
@@ -39,7 +45,13 @@ export default {
 
 <style scoped lang="scss" rel="stylesheet/scss">
 
+  @import "../../style/colors";
+
   .NoteList {
+
+    h2 {
+      border-bottom: 1px solid $border-color;
+    }
 
   }
 

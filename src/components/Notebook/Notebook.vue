@@ -1,9 +1,10 @@
 <template>
   <div class='Notebook'>
-    <h2>Your Notes:</h2>
-    <note-list v-bind:notes='notes' v-bind:expired="false"></note-list>
-    <h2>Expired Notes:</h2>
-    <note-list v-bind:notes='notes' v-bind:expired="true"></note-list>
+
+    <note-list v-bind:notes='notes' v-bind:expired='false' v-bind:title="'Your Notes:'" v-bind:empty-message="'You don\'t have notes.'"></note-list>
+
+    <note-list v-bind:notes='notes' v-bind:expired='true' v-bind:title="'Expired Notes:'"></note-list>
+
   </div>
 </template>
 

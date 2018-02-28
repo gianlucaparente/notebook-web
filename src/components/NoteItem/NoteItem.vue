@@ -40,7 +40,7 @@ export default {
 
 <style scoped lang="scss" rel="stylesheet/scss">
 
-  $border-color: lightgray;
+  @import "../../style/colors";
 
   .NoteItem {
     background-color: white;
