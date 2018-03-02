@@ -1,41 +1,57 @@
 <template>
   <div class='NoteList' v-if="haveNotes || emptyMessage">
     <h2>{{ title }}</h2>
-    <note-item v-if="haveNotes" v-for='note in calculatedNotes' v-bind:note='note' v-bind:key='note.id'></note-item>
+    <note-item v-if="haveNotes" v-for='note in notes' v-bind:note='note' v-bind:key='note.id'></note-item>
     <div v-if="!haveNotes">{{ emptyMessage }}</div>
   </div>
 </template>
 
 <script type="text/babel">
-import NoteItem from '@/components/NoteItem/NoteItem'
+import NoteItem from '@/components/NoteItem/NoteItem';
+import EventsBus from '@/services/EventsBus';
+import Axios from 'axios';
+
 export default {
   name: 'NoteList',
   props: [
-    'notes',
     'expired',
     'title',
     'emptyMessage'
   ],
+  data() {
+    return {
+      notes: []
+    }
+  },
+  mounted () {
+
+    EventsBus.$on('NOTE_SAVED', (event) => {
+      debugger;
+      if (event.data.expired === this.expired) {
+        console.log("NoteList: event received",  event.data);
+        this.getNotes(this.expired);
+      }
+    });
+
+    this.getNotes(this.expired);
+
+  },
   computed: {
-      calculatedNotes: function() {
-        return this.filterNoteList(this.expired);
-      },
       haveNotes:  function() {
-        return this.calculatedNotes.length > 0;
+        return this.notes.length > 0;
       }
   },
   methods: {
-    filterNoteList: function (expired) {
+    getNotes(expired) {
 
-      console.log("filterNoteList called");
-
-      if (expired === undefined) {
-        return this.notes;
-      }
-
-      return this.notes.filter(function (note) {
-        return note.expired === expired;
-      });
+      Axios.get("http://localhost:8080/notes/expired/" + expired)
+        .then((response) => {
+          this.notes = response.data;
+          console.log("NotebookApp: Data retrieved correctly.");
+        })
+        .catch((e) => {
+          console.log(e);
+        });
 
     }
   },
@@ -45,12 +61,12 @@ export default {
 
 <style scoped lang="scss" rel="stylesheet/scss">
 
-  @import "../../style/colors";
+  @import "../../style/main";
 
   .NoteList {
 
     h2 {
-      border-bottom: 1px solid $border-color;
+      border-bottom: 1px solid $grey;
     }
 
   }

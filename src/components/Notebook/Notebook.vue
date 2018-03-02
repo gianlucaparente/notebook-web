@@ -1,40 +1,35 @@
 <template>
   <div class='Notebook'>
 
-    <note-list v-bind:notes='notes' v-bind:expired='false' v-bind:title="'Your Notes:'" v-bind:empty-message="'You don\'t have notes.'"></note-list>
+    <div class='Notebook__content'>
+      <note-list v-bind:expired='false' v-bind:title="'Your Notes:'" v-bind:empty-message="'You don\'t have notes.'"></note-list>
+      <note-list v-bind:expired='true' v-bind:title="'Expired Notes:'"></note-list>
+    </div>
 
-    <note-list v-bind:notes='notes' v-bind:expired='true' v-bind:title="'Expired Notes:'"></note-list>
+    <div class='Notebook__sidebar'>
+      <add-note></add-note>
+    </div>
 
   </div>
 </template>
 
 <script type="text/babel">
 import NoteList from '@/components/NoteList/NoteList';
-import NoteItem from '@/components/NoteItem/NoteItem';
+import AddNote from '@/components/AddNote/AddNote';
+
 import Axios from 'axios';
 
 export default {
   name: 'Notebook',
   data () {
-    return {
-      notes: []
-    }
+    return {}
   },
-  components: { NoteList },
+  components: { NoteList, AddNote },
   mounted: function () {
     this.retrieveData(Axios);
   },
   methods: {
     retrieveData(Axios) {
-
-      Axios.get("http://localhost:8080/notes")
-        .then((response) => {
-          this.notes = response.data;
-          console.log("NotebookApp: Data retrieved correctly.");
-        })
-        .catch((e) => {
-            console.log(e);
-        });
 
     }
   }
@@ -43,18 +38,22 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss" rel="stylesheet/scss">
-h1, h2 {
-  font-weight: normal;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
+
+  @import "../../style/main";
+
+  .Notebook {
+
+    display: flex;
+
+    &__content {
+      width: 100% * 2/3;
+      margin-right: 8px;
+    }
+
+    &__sidebar {
+      width: 100% * 1/3;
+    }
+
+  }
+
 </style>
