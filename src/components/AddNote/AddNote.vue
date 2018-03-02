@@ -43,9 +43,9 @@ export default {
 
       Axios.post("http://localhost:8080/notes/note", this.note)
         .then((noteSaved) => {
-          console.log("AddNote: Note saved correctly.", noteSaved);
+          console.log("AddNote: Note saved correctly.", noteSaved.data);
           this.setMessage("Note saved.", "success");
-          this.emitEvent("NOTE_SAVED", noteSaved);
+          this.emitEvent("NOTE_SAVED", noteSaved.data);
         })
         .catch((e) => {
           console.log(e);

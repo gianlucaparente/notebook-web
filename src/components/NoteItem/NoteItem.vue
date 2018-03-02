@@ -4,6 +4,14 @@
     <div class="NoteItem__header">
       <h3 class="NoteItem__header__title">{{ note.title }}</h3>
       <div class="NoteItem__header__date" v-if="note.date">{{ new Date(note.date).toLocaleString() }}</div>
+      <div class="NoteItem__header__actions">
+        <div class="NoteItem__header__actions__action">
+          <img src="../../assets/svg/edit.svg">
+        </div>
+        <div class="NoteItem__header__actions__action" @click="subNote">
+          <img src="../../assets/svg/trash.svg">
+        </div>
+      </div>
     </div>
 
     <div class="NoteItem__content">
@@ -31,10 +39,28 @@
   </div>
 </template>
 
-<script>
+<script type="text/babel">
+
+import Axios from 'axios';
+import EventsBus from '@/services/EventsBus';
+
 export default {
   name: 'NoteItem',
-  props: ['note']
+  props: ['note'],
+  methods: {
+    subNote() {
+
+      Axios.delete("http://localhost:8080/notes/note/" + this.note.id)
+        .then(() => {
+          EventsBus.$emit('NOTE_DELETED', this.note);
+          console.log("NotebookApp: Note deleted correctly.");
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+
+    }
+  }
 }
 </script>
 
@@ -56,9 +82,36 @@ export default {
 
       &__title {
         font-weight: bold;
+        flex-grow: 1;
       }
 
-      &__date { }
+      &__date {
+        flex-grow: 1;
+        text-align: right;
+      }
+
+      &__actions {
+        flex-grow: 0;
+        display: flex;
+        border-left: 1px solid $grey;
+        padding-left: 5px;
+        margin-left: 10px;
+
+        &__action {
+          margin-left: 5px;
+          display: flex;
+          align-items: center;
+          -webkit-justify-content: center;
+          justify-content: center;
+
+          img {
+            width: 15px;
+          }
+
+
+        }
+
+      }
 
     }
 

@@ -4,3 +4,7 @@
   -ms-border-radius: $radius;
   border-radius: $radius;
 }
+
+@mixin svg($svg-name) {
+  background-image: '../assets/svg/' + $svg-name + '.svg';
+}

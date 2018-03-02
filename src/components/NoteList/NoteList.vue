@@ -25,10 +25,16 @@ export default {
   },
   mounted () {
 
-    EventsBus.$on('NOTE_SAVED', (event) => {
-      debugger;
-      if (event.data.expired === this.expired) {
-        console.log("NoteList: event received",  event.data);
+    EventsBus.$on('NOTE_SAVED', (note) => {
+      if (note.expired === this.expired) {
+        console.log("NoteList: event received",  note);
+        this.getNotes(this.expired);
+      }
+    });
+
+    EventsBus.$on('NOTE_DELETED', (note) => {
+      if (note.expired === this.expired) {
+        console.log("NoteList: event received",  note);
         this.getNotes(this.expired);
       }
     });
