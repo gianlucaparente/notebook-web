@@ -5,7 +5,9 @@
 
     <div class="AddNote__form form">
 
-      <div v-if="message" :class="messageClass" class="AddNote__message message">{{ message }}</div>
+      <transition name="fade">
+        <div v-if="message" :class="messageClass" class="AddNote__message message">{{ message }}</div>
+      </transition>
 
       <label for="title">Title <span class="required">*</span></label>
       <input id="title" type="text" v-model="note.title">
@@ -24,6 +26,7 @@
 </template>
 
 <script type="text/babel">
+import Vue from 'vue';
 import Axios from 'axios';
 import EventsBus from '@/services/EventsBus';
 
@@ -35,6 +38,9 @@ export default {
       message: undefined,
       messageClass: undefined
     }
+  },
+  mounted() {
+
   },
   methods: {
     addNote() {
@@ -56,6 +62,12 @@ export default {
     setMessage(message, messageClass) {
       this.message = message;
       this.messageClass = messageClass;
+
+      setTimeout(() => {
+        this.message = undefined;
+        this.messageClass = undefined;
+      }, 2000);
+
     },
     emitEvent(name, data) {
       EventsBus.$emit(name, data);
@@ -78,6 +90,8 @@ export default {
 
     &__form {
       margin: 5px;
+
+
 
       input[type=text], textarea {
         margin-bottom: 10px;
