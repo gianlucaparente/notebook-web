@@ -18,7 +18,7 @@
 
       <div class="NoteItem__content__description">{{ note.description || "No description" }}</div>
 
-      <div class="NoteItem__content__sidebar">
+      <div class="NoteItem__content__sidebar" v-if="note.address || note.contact">
 
           <div class="NoteItem__content__sidebar__address" v-if="note.address">
             <h3 class="NoteItem__content__sidebar__address__title">Address:</h3>
@@ -121,12 +121,13 @@ export default {
 
       &__description {
         padding: 5px;
+        width: 100% * 2/3;
       }
 
       &__sidebar {
         padding: 5px;
         border-left: 1px solid $grey;
-        width: 250px;
+        width: 100% * 1/3;
 
         &__address {
           margin-bottom: 5px;
