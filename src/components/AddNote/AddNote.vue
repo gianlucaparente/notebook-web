@@ -3,11 +3,9 @@
 
     <h2>Add Note:</h2>
 
-    <div class="AddNote__form form">
+    <show-message v-bind:message="message"></show-message>
 
-      <transition name="fade">
-        <div v-if="message" :class="messageClass" class="AddNote__message message">{{ message }}</div>
-      </transition>
+    <div class="AddNote__form form">
 
       <label for="title">Title <span class="required">*</span></label>
       <input id="title" type="text" v-model="note.title">
@@ -29,14 +27,15 @@
 import Vue from 'vue';
 import Axios from 'axios';
 import EventsBus from '@/services/EventsBus';
+import MessageFactory from '@/components/ShowMessage/MessageFactory';
+import ShowMessage from '@/components/ShowMessage/ShowMessage';
 
 export default {
   name: 'AddNote',
   data () {
     return {
       note: {},
-      message: undefined,
-      messageClass: undefined
+      message: undefined
     }
   },
   mounted() {
@@ -50,30 +49,21 @@ export default {
       Axios.post("http://localhost:8080/notes/note", this.note)
         .then((noteSaved) => {
           console.log("AddNote: Note saved correctly.", noteSaved.data);
-          this.setMessage("Note saved.", "success");
+          this.message = MessageFactory.getMessage("Note saved.", MessageFactory.MESSAGE_CLASSES.success)
           this.emitEvent("NOTE_SAVED", noteSaved.data);
         })
         .catch((e) => {
           console.log(e);
-          this.setMessage(e.response.data.message, "error");
+          this.message = MessageFactory.getMessage("Save note failed.", MessageFactory.MESSAGE_CLASSES.error)
         });
-
-    },
-    setMessage(message, messageClass) {
-      this.message = message;
-      this.messageClass = messageClass;
-
-      setTimeout(() => {
-        this.message = undefined;
-        this.messageClass = undefined;
-      }, 2000);
 
     },
     emitEvent(name, data) {
       EventsBus.$emit(name, data);
       console.log("AddNote: emit event " + name);
     }
-  }
+  },
+  components: { ShowMessage }
 }
 </script>
 
@@ -90,8 +80,6 @@ export default {
 
     &__form {
       margin: 5px;
-
-
 
       input[type=text], textarea {
         margin-bottom: 10px;
