@@ -69,14 +69,14 @@ export default {
   @import "../../style/main";
 
   .NoteItem {
-    background-color: white;
+    background-color: $yellow-light;
     border: 1px solid $grey;
-    margin: 5px;
-    padding: 10px;
+    margin: 5px 5px 10px 5px;
 
     &__header {
+      padding: 10px;
+      background-color: orange;
       border-bottom: 1px solid $grey;
-      padding: 0 5px 5px 5px;
       display: flex;
       justify-content: space-between;
 
@@ -116,6 +116,7 @@ export default {
     }
 
     &__content {
+      padding: 5px;;
       display: flex;
       justify-content: space-between;
 

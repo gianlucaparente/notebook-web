@@ -35,6 +35,7 @@ module.exports = {
     extensions: ['.js', '.vue', '.json'],
     alias: {
       vue: 'vue/dist/vue.js',
+      'vuejs-datepicker': 'vuejs-datepicker/dist/build.js',
       '@': resolve('src')
     }
   },

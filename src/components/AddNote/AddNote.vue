@@ -11,8 +11,8 @@
       <input id="title" type="text" v-model="note.title">
       <label for="description">Description</label>
       <textarea id="description" v-model="note.description"></textarea>
-      <label for="date">Date</label>
-      <input id="date" type="text" v-model="note.date">
+      <label>Date</label>
+      <datepicker v-model="note.date"></datepicker>
       <label for="address">Address</label>
       <input id="address" type="text" v-model="note.address">
 
@@ -29,6 +29,7 @@ import Axios from 'axios';
 import EventsBus from '@/services/EventsBus';
 import MessageFactory from '@/components/ShowMessage/MessageFactory';
 import ShowMessage from '@/components/ShowMessage/ShowMessage';
+import Datepicker from 'vuejs-datepicker';
 
 export default {
   name: 'AddNote',
@@ -63,7 +64,7 @@ export default {
       console.log("AddNote: emit event " + name);
     }
   },
-  components: { ShowMessage }
+  components: { ShowMessage, Datepicker }
 }
 </script>
 

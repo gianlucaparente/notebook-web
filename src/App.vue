@@ -53,7 +53,7 @@
   }
 
   #app {
-    font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+    font-family: "Comic Sans MS", "Lucida Sans Unicode", "Lucida Grande", sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     color: #2c3e50;
