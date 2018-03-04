@@ -35,7 +35,8 @@ module.exports = {
     extensions: ['.js', '.vue', '.json'],
     alias: {
       vue: 'vue/dist/vue.js',
-      'vuejs-datepicker': 'vuejs-datepicker/dist/build.js',
+      'vue-simple-datetime-picker': 'vue-simple-datetime-picker/dist/lib/vue-simple-datetime-picker.min.js',
+      'moment': 'moment/moment.js',
       '@': resolve('src')
     }
   },

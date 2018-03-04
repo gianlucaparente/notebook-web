@@ -12,7 +12,7 @@
       <label for="description">Description</label>
       <textarea id="description" v-model="note.description"></textarea>
       <label>Date</label>
-      <datepicker v-model="note.date"></datepicker>
+      <vue-simple-datetime-picker v-model='note.date' options="datePikerOptions" format="YYYY-MM-DD HH:mm:ss" value="note.date" ></vue-simple-datetime-picker>
       <label for="address">Address</label>
       <input id="address" type="text" v-model="note.address">
 
@@ -26,17 +26,21 @@
 <script type="text/babel">
 import Vue from 'vue';
 import Axios from 'axios';
+import Moment from 'moment';
 import EventsBus from '@/services/EventsBus';
 import MessageFactory from '@/components/ShowMessage/MessageFactory';
 import ShowMessage from '@/components/ShowMessage/ShowMessage';
-import Datepicker from 'vuejs-datepicker';
+import VueSimpleDatetimePicker from 'vue-simple-datetime-picker';
 
 export default {
   name: 'AddNote',
   data () {
     return {
       note: {},
-      message: undefined
+      message: undefined,
+      dateRange: {
+        to: Moment().subtract(1, "days").toDate()
+      }
     }
   },
   mounted() {
@@ -46,6 +50,9 @@ export default {
     addNote() {
 
       // add validation
+      if(this.note && this.note.date) {
+        this.note.date = Moment(this.note.date).toDate();
+      }
 
       Axios.post("http://localhost:8080/notes/note", this.note)
         .then((noteSaved) => {
@@ -64,7 +71,7 @@ export default {
       console.log("AddNote: emit event " + name);
     }
   },
-  components: { ShowMessage, Datepicker }
+  components: { ShowMessage, VueSimpleDatetimePicker }
 }
 </script>
 
