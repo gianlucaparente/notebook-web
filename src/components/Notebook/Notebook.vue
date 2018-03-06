@@ -2,12 +2,12 @@
   <div class='Notebook'>
 
     <div class='Notebook__content'>
-      <note-list v-bind:expired='false' v-bind:title="'Your Notes:'" v-bind:empty-message="'You don\'t have notes.'"></note-list>
-      <note-list v-bind:expired='true' v-bind:title="'Expired Notes:'"></note-list>
+      <overview-notes></overview-notes>
     </div>
 
     <div class='Notebook__sidebar'>
-      <add-note></add-note>
+      <note-list v-bind:expired='false' v-bind:title="'Your Notes:'" v-bind:empty-message="'You don\'t have notes.'"></note-list>
+      <note-list v-bind:expired='true' v-bind:title="'Expired Notes:'"></note-list>
     </div>
 
   </div>
@@ -15,7 +15,7 @@
 
 <script type="text/babel">
 import NoteList from '@src/components/NoteList/NoteList';
-import AddNote from '@src/components/AddNote/AddNote';
+import OverviewNotes from '@src/components/OverviewNotes/OverviewNotes';
 
 import Axios from 'axios';
 
@@ -24,15 +24,9 @@ export default {
   data () {
     return {}
   },
-  components: { NoteList, AddNote },
-  mounted: function () {
-    this.retrieveData(Axios);
-  },
-  methods: {
-    retrieveData(Axios) {
-
-    }
-  }
+  components: { OverviewNotes, NoteList },
+  mounted: function () {},
+  methods: {}
 }
 </script>
 
