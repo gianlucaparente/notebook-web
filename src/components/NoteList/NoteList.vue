@@ -8,10 +8,10 @@
 </template>
 
 <script type="text/babel">
-import NoteItem from '@/components/NoteItem/NoteItem';
-import EventsBus from '@/services/EventsBus';
-import MessageFactory from '@/components/ShowMessage/MessageFactory';
-import ShowMessage from '@/components/ShowMessage/ShowMessage';
+import NoteItem from '@src/components/NoteItem/NoteItem';
+import EventsBus from '@src/services/EventsBus';
+import MessageFactory from '@src/components/ShowMessage/MessageFactory';
+import ShowMessage from '@src/components/ShowMessage/ShowMessage';
 import Axios from 'axios';
 
 export default {

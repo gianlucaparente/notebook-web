@@ -14,8 +14,8 @@
 </template>
 
 <script type="text/babel">
-import NoteList from '@/components/NoteList/NoteList';
-import AddNote from '@/components/AddNote/AddNote';
+import NoteList from '@src/components/NoteList/NoteList';
+import AddNote from '@src/components/AddNote/AddNote';
 
 import Axios from 'axios';
 

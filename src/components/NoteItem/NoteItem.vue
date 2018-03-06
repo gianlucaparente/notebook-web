@@ -6,10 +6,11 @@
       <div class="NoteItem__header__date" v-if="note.date">{{ new Date(note.date).toLocaleString() }}</div>
       <div class="NoteItem__header__actions">
         <div class="NoteItem__header__actions__action">
-          <img src="../../assets/svg/edit.svg">
+          <!--<img src="../../assets/svg/edit.svg">-->
+          <icon name="edit"></icon>
         </div>
         <div class="NoteItem__header__actions__action" @click="subNote">
-          <img src="../../assets/svg/trash.svg">
+          <icon name="trash"></icon>
         </div>
       </div>
     </div>
@@ -42,11 +43,16 @@
 <script type="text/babel">
 
 import Axios from 'axios';
-import EventsBus from '@/services/EventsBus';
+import EventsBus from '@src/services/EventsBus';
+
+import '@lib/vue-awesome/icons/edit';
+import '@lib/vue-awesome/icons/trash';
+import Icon from '@lib/vue-awesome/components/Icon';
 
 export default {
   name: 'NoteItem',
   props: ['note'],
+  components: { Icon },
   methods: {
     subNote() {
 
@@ -103,12 +109,12 @@ export default {
           align-items: center;
           -webkit-justify-content: center;
           justify-content: center;
+          cursor: pointer;
 
-          img {
-            width: 15px;
+          svg {
+            width: 20px;
+            height: 20px;
           }
-
-
         }
 
       }

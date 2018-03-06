@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Notebook from '@/components/Notebook/Notebook'
+import Notebook from '@src/components/Notebook/Notebook'
 
 Vue.use(Router);
 
