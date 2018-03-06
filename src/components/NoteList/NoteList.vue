@@ -29,18 +29,20 @@ export default {
   },
   mounted () {
 
-    EventsBus.$on('NOTE_SAVED', (note) => {
-      if (note.expired === this.expired) {
+    let self = this;
+
+    EventsBus.$on('NOTE_SAVED', function(note) {
+      if (note.expired === self.expired) {
         console.log("NoteList: event received",  note);
-        this.getNotes(this.expired);
+        self.getNotes(self.expired);
       }
     });
 
-    EventsBus.$on('NOTE_DELETED', (note) => {
-      if (note.expired === this.expired) {
+    EventsBus.$on('NOTE_DELETED', function(note) {
+      if (note.expired === self.expired) {
         console.log("NoteList: event received",  note);
-        this.message = MessageFactory.getMessage("Note '" + note.title + "' removed.", MessageFactory.MESSAGE_CLASSES.success);
-        this.getNotes(this.expired);
+        self.message = MessageFactory.getMessage("Note '" + note.title + "' removed.", MessageFactory.MESSAGE_CLASSES.success);
+        self.getNotes(self.expired);
       }
     });
 
@@ -55,9 +57,11 @@ export default {
   methods: {
     getNotes(expired) {
 
+      let self = this;
+
       Axios.get("http://localhost:8080/notes/expired/" + expired)
         .then((response) => {
-          this.notes = response.data;
+          self.notes = response.data;
           console.log("NotebookApp: Data retrieved correctly.");
         })
         .catch((e) => {
