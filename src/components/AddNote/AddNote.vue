@@ -3,8 +3,6 @@
 
     <h2>Add Note:</h2>
 
-    <show-message v-bind:message="message"></show-message>
-
     <div class="AddNote__form form">
 
       <label for="title">Title <span class="required">*</span></label>
@@ -36,8 +34,8 @@
   import Axios from 'axios';
   import moment from '@lib/moment/moment.js';
   import EventsBus from '@src/services/EventsBus';
+  import Entities from '@src/entities.js';
   import MessageFactory from '@src/components/ShowMessage/MessageFactory';
-  import ShowMessage from '@src/components/ShowMessage/ShowMessage';
   import FlatPickr from '@lib/vue-flatpickr-component/dist/vue-flatpickr.js';
   import '@lib/flatpickr/dist/flatpickr.css';
 
@@ -46,13 +44,11 @@
     data () {
       return {
         note: {},
-        message: undefined,
         enableDate: false,
         enableAddress: false,
         flatPickrConfig: {
           dateFormat: 'Y-m-d H:i',
           enableTime: true,
-          minDate: moment().subtract(1, 'days').toDate(),
           time_24hr: true
         }
       }
@@ -87,7 +83,7 @@
       addNote() {
 
         if (!this.note.title || this.note.title === "") {
-          this.message = MessageFactory.getMessage("Field Title is not correct.", MessageFactory.MESSAGE_CLASSES.error);
+          EventsBus.$emit(Entities.EventsNames.ERROR, MessageFactory.getMessage("Field Title is not correct.", MessageFactory.MESSAGE_CLASSES.error));
           return;
         }
 
@@ -96,28 +92,23 @@
         }
 
         if (this.enableAddress && (!this.note.address || this.note.address === "")) {
-          this.message = MessageFactory.getMessage("Field Address is not correct.", MessageFactory.MESSAGE_CLASSES.error);
+          EventsBus.$emit(Entities.EventsNames.ERROR, MessageFactory.getMessage("Field Address is not correct.", MessageFactory.MESSAGE_CLASSES.error));
           return;
         }
 
         Axios.post("http://localhost:8080/notes/note", this.note)
           .then((noteSaved) => {
             console.log("AddNote: Note saved correctly.", noteSaved.data);
-            this.message = MessageFactory.getMessage("Note saved.", MessageFactory.MESSAGE_CLASSES.success);
-            this.emitEvent("NOTE_SAVED", noteSaved.data);
+            EventsBus.$emit(Entities.EventsNames.NOTE_SAVED, noteSaved.data, MessageFactory.getMessage("Note '" + noteSaved.data.title + "' created.", MessageFactory.MESSAGE_CLASSES.success));
           })
           .catch((e) => {
             console.log(e);
-            this.message = MessageFactory.getMessage("Save note failed.", MessageFactory.MESSAGE_CLASSES.error);
+            EventsBus.$emit(Entities.EventsNames.ERROR, MessageFactory.getMessage("Save note failed.", MessageFactory.MESSAGE_CLASSES.error));
           });
 
-      },
-      emitEvent(name, data) {
-        EventsBus.$emit(name, data);
-        console.log("AddNote: emit event " + name);
       }
     },
-    components: { ShowMessage, FlatPickr }
+    components: { FlatPickr }
   }
 </script>
 

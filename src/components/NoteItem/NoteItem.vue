@@ -44,7 +44,8 @@
 
 import Axios from 'axios';
 import EventsBus from '@src/services/EventsBus';
-
+import Entities from '@src/entities.js';
+import MessageFactory from '@src/components/ShowMessage/MessageFactory';
 import '@lib/vue-awesome/icons/edit';
 import '@lib/vue-awesome/icons/trash';
 import Icon from '@lib/vue-awesome/components/Icon';
@@ -58,11 +59,12 @@ export default {
 
       Axios.delete("http://localhost:8080/notes/note/" + this.note.id)
         .then(() => {
-          EventsBus.$emit('NOTE_DELETED', this.note);
           console.log("NotebookApp: Note deleted correctly.");
+          EventsBus.$emit(Entities.EventsNames.NOTE_DELETED, this.note, MessageFactory.getMessage("Note '" + this.note.title + "' removed.", MessageFactory.MESSAGE_CLASSES.success));
         })
         .catch((e) => {
           console.log(e);
+          EventsBus.$emit(Entities.EventsNames.ERROR, MessageFactory.getMessage("Delete note failed.", MessageFactory.MESSAGE_CLASSES.error));
         });
 
     }

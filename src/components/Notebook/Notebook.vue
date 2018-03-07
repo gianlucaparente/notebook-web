@@ -19,6 +19,7 @@
   import OverviewNotes from '@src/components/OverviewNotes/OverviewNotes';
   import AddNote from '@src/components/AddNote/AddNote';
   import EventsBus from '@src/services/EventsBus';
+  import Entities from '@src/entities.js';
   import Axios from 'axios';
 
   export default {
@@ -35,17 +36,16 @@
 
       let self = this;
 
-      EventsBus.$on('NOTE_SAVED', function (note) {
-        console.log("Notebook: event received", note);
-        self.getNotes(note.expired);
-      });
-
-      EventsBus.$on('NOTE_DELETED', function (note) {
-        console.log("Notebook: event received", note);
-        self.getNotes(note.expired);
-      });
+      EventsBus.$on(
+        [
+          Entities.EventsNames.NOTE_SAVED,
+          Entities.EventsNames.NOTE_DELETED
+        ], function (note, message) {
+          self.getNotes(note.expired);
+        });
 
       this.getNotes();
+
     },
     methods: {
       getNotes(expired) {
@@ -87,7 +87,7 @@
             });
 
             console.log("Notebook: Notes to calendar calculated.");
-            EventsBus.$emit('NOTES_LOADED');
+            EventsBus.$emit(Entities.EventsNames.NOTES_LOADED);
 
           }))
           .catch((e) => {

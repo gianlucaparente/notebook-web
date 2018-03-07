@@ -26,16 +26,7 @@
         message: undefined
       }
     },
-    mounted () {
-
-      let self = this;
-
-      EventsBus.$on('NOTE_DELETED', function (note) {
-        console.log("NoteList: event received", note);
-        self.message = MessageFactory.getMessage("Note '" + note.title + "' removed.", MessageFactory.MESSAGE_CLASSES.success);
-      });
-
-    },
+    mounted () {},
     computed: {
       haveNotes: function() {
         return this.notes.length > 0;

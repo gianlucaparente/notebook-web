@@ -1,0 +1,11 @@
+export default class Entities {
+
+  static EventsNames = {
+    ERROR: "ERROR",
+    NOTE_SAVED: "NOTE_SAVED",
+    NOTE_DELETED: "NOTE_DELETED",
+    NOTES_LOADED: "NOTES_LOADED"
+  };
+
+}
+

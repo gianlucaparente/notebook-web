@@ -25,7 +25,7 @@
         this.showMessage = true;
         setTimeout(() => {
           this.showMessage = false;
-        }, 2000);
+        }, 3000);
 
       }
     },

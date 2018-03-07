@@ -4,6 +4,7 @@
     <header class="Header">
       <img width="100" height="100" src="./assets/logo.png">
       <h1 class="Header__title">{{ welcome }}</h1>
+      <show-message class="Header__message" v-bind:message="message"></show-message>
     </header>
 
     <content>
@@ -17,12 +18,30 @@
 </template>
 
 <script type="text/babel">
+
+  import ShowMessage from '@src/components/ShowMessage/ShowMessage';
+  import Entities from '@src/entities.js';
+  import EventsBus from '@src/services/EventsBus';
+
   export default {
     name: 'App',
+    components: {ShowMessage},
     data() {
       return {
-        welcome: "Welcome to your Notebook!"
+        welcome: "Welcome to your Notebook!",
+        message: undefined
       }
+    },
+    mounted() {
+
+      let self = this;
+
+      EventsBus.$on([
+        Entities.EventsNames.NOTE_SAVED,
+        Entities.EventsNames.NOTE_DELETED
+      ], function (note, message) {
+        self.message = message;
+      });
     }
   }
 </script>
@@ -67,7 +86,14 @@
         margin: 0 0 0 10px;
       }
 
-      img {  }
+      img {
+      }
+
+      &__message {
+        position: absolute;
+        right: 10px;
+        top: 10px;
+      }
 
     }
 
