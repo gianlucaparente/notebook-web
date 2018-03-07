@@ -42,6 +42,11 @@
       ], function (note, message) {
         self.message = message;
       });
+
+      EventsBus.$on([Entities.EventsNames.ERROR], function (message) {
+        self.message = message;
+      });
+
     }
   }
 </script>
