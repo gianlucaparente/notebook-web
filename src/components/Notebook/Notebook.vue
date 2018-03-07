@@ -36,12 +36,12 @@
       let self = this;
 
       EventsBus.$on('NOTE_SAVED', function (note) {
-        console.log("NoteList: event received", note);
+        console.log("Notebook: event received", note);
         self.getNotes(note.expired);
       });
 
       EventsBus.$on('NOTE_DELETED', function (note) {
-        console.log("NoteList: event received", note);
+        console.log("Notebook: event received", note);
         self.getNotes(note.expired);
       });
 
@@ -49,6 +49,8 @@
     },
     methods: {
       getNotes(expired) {
+
+        this.notesToCalendar = [];
 
         let httpRequests = [];
         if (!!expired) {
@@ -76,13 +78,16 @@
               self.notesExpired = notesExpired.data;
             }
 
-            console.log("NotebookApp: Data retrieved correctly.");
+            console.log("Notebook: Data retrieved correctly.");
 
-            self.notes.forEach(function (note) {
+            self.notes.concat(self.notesExpired).forEach(function (note) {
               if (note.date) {
                 self.notesToCalendar.push(note.date);
               }
             });
+
+            console.log("Notebook: Notes to calendar calculated.");
+            EventsBus.$emit('NOTES_LOADED');
 
           }))
           .catch((e) => {

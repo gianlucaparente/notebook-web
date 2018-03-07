@@ -15,7 +15,7 @@
       <div class="AddNote__form__date">
         <input id="enableDate" type="checkbox" v-model="enableDate"/>
         <label for="enableDate">Add a Date</label>
-        <flat-pickr id="flatPickr" v-model="note.date" :config="faltPickrConfig"></flat-pickr>
+        <flat-pickr id="flatPickr" v-model="note.date" :config="flatPickrConfig"></flat-pickr>
       </div>
 
       <div class="AddNote__form__address">
@@ -49,10 +49,11 @@
         message: undefined,
         enableDate: false,
         enableAddress: false,
-        faltPickrConfig: {
+        flatPickrConfig: {
           dateFormat: 'Y-m-d H:i',
           enableTime: true,
-          minDate: moment().subtract(1, 'days').toDate()
+          minDate: moment().subtract(1, 'days').toDate(),
+          time_24hr: true
         }
       }
     },

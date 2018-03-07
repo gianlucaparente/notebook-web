@@ -1,19 +1,16 @@
 <template>
-  <div class='OverviewNotes'>
+  <div id="OverviewNotes" class='OverviewNotes'>
     <h2>Overview</h2>
-    <flat-pickr
-      v-model="dateSelected"
-      :config="config"
-      :events="myEvents"
-      @on-day-create="onDayCreate"></flat-pickr>
+    <div id="flatpickr"></div>
   </div>
 </template>
 
 <script type="text/babel">
-  import FlatPickr from '@lib/vue-flatpickr-component/dist/vue-flatpickr.js';
+  import flatpickr from '@lib/flatpickr/dist/flatpickr.js';
   import '@lib/flatpickr/dist/flatpickr.css';
   import moment from '@lib/moment/moment.js';
   import Axios from 'axios';
+  import EventsBus from '@src/services/EventsBus';
 
   export default {
     name: 'OverviewNotes',
@@ -21,38 +18,53 @@
       'notes'
     ],
     data () {
+      let self = this;
       return {
+        calendar: undefined,
+        dataReady: false,
         config: {
           inline: true,
           static: true,
-          altInputClass: "'flatPickrOverviewNotes'"
-        },
-        dateSelected: moment().toDate(),
-        myEvents: [
-          'onChange',
-          'onClose',
-          'onDestroy',
-          'onKeyDown',
-          'onMonthChange',
-          'onOpen',
-          'onYearChange',
-          'onValueUpdate',
-          'onDayCreate',
-          'onParseConfig',
-          'onReady',
-          'onPreCalendarPosition'
-        ]
-      }
-    },
-    components: {FlatPickr},
-    mounted: function () {},
-    methods: {
-      onDayCreate(dObj, dStr, fp, dayElem) {
-        if (moment(dObj[0]) === new Date()) {
-          dayElem.innerHTML += "<span class='flatpickr-event'></span>";
+          altInputClass: "'flatPickrOverviewNotes'",
+          onDayCreate: function(dObj, dStr, fp, dayElem) {
+
+            let date = dayElem.dateObj;
+
+            self.notes.forEach(function (noteDate) {
+
+              if (sameDay(date, new Date(noteDate))) {
+                dayElem.innerHTML += "<span class='flatpickr-event'></span>";
+              }
+
+            });
+
+            function sameDay(d1, d2) {
+              return d1.getFullYear() === d2.getFullYear() &&
+                d1.getMonth() === d2.getMonth() &&
+                d1.getDate() === d2.getDate();
+            }
+
+          }
         }
       }
-    }
+    },
+    components: {},
+    mounted: function () {
+
+      let self = this;
+
+      EventsBus.$on('NOTES_LOADED', function () {
+
+        if (!self.calendar) {
+          self.calendar = flatpickr('#flatpickr', self.config);
+        } else {
+          self.calendar.redraw();
+        }
+
+      });
+
+    },
+    methods: {}
   }
 </script>
 
@@ -68,7 +80,7 @@
     }
 
     .flatpickr-wrapper {
-      margin: 5px;
+      margin: 0 5px;
 
       .flatpickr-input {
         display: none;
