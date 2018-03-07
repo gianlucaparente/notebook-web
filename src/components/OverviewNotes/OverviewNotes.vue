@@ -1,5 +1,6 @@
 <template>
   <div class='OverviewNotes'>
+    <h2>Overview</h2>
     <flat-pickr
       v-model="dateSelected"
       :config="config"
@@ -12,9 +13,13 @@
   import FlatPickr from '@lib/vue-flatpickr-component/dist/vue-flatpickr.js';
   import '@lib/flatpickr/dist/flatpickr.css';
   import moment from '@lib/moment/moment.js';
+  import Axios from 'axios';
 
   export default {
     name: 'OverviewNotes',
+    props: [
+      'notes'
+    ],
     data () {
       return {
         config: {
@@ -43,7 +48,7 @@
     mounted: function () {},
     methods: {
       onDayCreate(dObj, dStr, fp, dayElem) {
-        if (Math.random() < 0.15) {
+        if (moment(dObj[0]) === new Date()) {
           dayElem.innerHTML += "<span class='flatpickr-event'></span>";
         }
       }
@@ -58,9 +63,12 @@
 
   .OverviewNotes {
 
+    h2 {
+      border-bottom: 1px solid $grey;
+    }
+
     .flatpickr-wrapper {
-      width: 100% !important;
-      margin: 10px;
+      margin: 5px;
 
       .flatpickr-input {
         display: none;

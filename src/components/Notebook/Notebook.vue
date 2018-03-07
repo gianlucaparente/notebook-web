@@ -1,33 +1,97 @@
 <template>
   <div class='Notebook'>
 
-    <div class='Notebook__content'>
-      <overview-notes></overview-notes>
+    <div class='Notebook__sidebar'>
+      <overview-notes v-bind:notes="notesToCalendar"></overview-notes>
+      <add-note></add-note>
     </div>
 
-    <div class='Notebook__sidebar'>
-      <note-list v-bind:expired='false' v-bind:title="'Your Notes:'" v-bind:empty-message="'You don\'t have notes.'"></note-list>
-      <note-list v-bind:expired='true' v-bind:title="'Expired Notes:'"></note-list>
+    <div class='Notebook__content'>
+      <note-list v-bind:notes='notes' :title="'Your Notes:'" :empty-message="'You don\'t have notes.'"></note-list>
+      <note-list v-bind:notes='notesExpired' :title="'Expired Notes:'"></note-list>
     </div>
 
   </div>
 </template>
 
 <script type="text/babel">
-import NoteList from '@src/components/NoteList/NoteList';
-import OverviewNotes from '@src/components/OverviewNotes/OverviewNotes';
+  import NoteList from '@src/components/NoteList/NoteList';
+  import OverviewNotes from '@src/components/OverviewNotes/OverviewNotes';
+  import AddNote from '@src/components/AddNote/AddNote';
+  import EventsBus from '@src/services/EventsBus';
+  import Axios from 'axios';
 
-import Axios from 'axios';
+  export default {
+    name: 'Notebook',
+    data () {
+      return {
+        notes: [],
+        notesExpired: [],
+        notesToCalendar: []
+      }
+    },
+    components: {OverviewNotes, NoteList, AddNote},
+    mounted: function () {
 
-export default {
-  name: 'Notebook',
-  data () {
-    return {}
-  },
-  components: { OverviewNotes, NoteList },
-  mounted: function () {},
-  methods: {}
-}
+      let self = this;
+
+      EventsBus.$on('NOTE_SAVED', function (note) {
+        console.log("NoteList: event received", note);
+        self.getNotes(note.expired);
+      });
+
+      EventsBus.$on('NOTE_DELETED', function (note) {
+        console.log("NoteList: event received", note);
+        self.getNotes(note.expired);
+      });
+
+      this.getNotes();
+    },
+    methods: {
+      getNotes(expired) {
+
+        let httpRequests = [];
+        if (!!expired) {
+          httpRequests.push(Axios.get("http://localhost:8080/notes/expired/" + expired));
+        } else {
+          httpRequests.push(Axios.get("http://localhost:8080/notes/expired/false"));
+          httpRequests.push(Axios.get("http://localhost:8080/notes/expired/true"));
+        }
+
+        let self = this;
+
+        Axios.all(httpRequests)
+          .then(Axios.spread(function (notes, notesExpired) {
+
+            if (!!expired) {
+
+              if (expired) {
+                self.notesExpired = notes.data;
+              } else {
+                self.notes = notes.data;
+              }
+
+            } else {
+              self.notes = notes.data;
+              self.notesExpired = notesExpired.data;
+            }
+
+            console.log("NotebookApp: Data retrieved correctly.");
+
+            self.notes.forEach(function (note) {
+              if (note.date) {
+                self.notesToCalendar.push(note.date);
+              }
+            });
+
+          }))
+          .catch((e) => {
+            console.log(e);
+          });
+
+      }
+    }
+  }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
@@ -36,16 +100,16 @@ export default {
   @import "../../style/main";
 
   .Notebook {
-
     display: flex;
 
-    &__content {
-      width: 100% * 2/3;
-      margin-right: 8px;
+    &__sidebar {
+      flex-grow: 0;
+      flex-direction: column;
+      margin-right: 10px;
     }
 
-    &__sidebar {
-      width: 100% * 1/3;
+    &__content {
+      flex-grow: 1;
     }
 
   }

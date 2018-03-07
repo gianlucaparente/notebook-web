@@ -151,7 +151,7 @@
 
         #flatPickr {
           display: none;
-          width: 250px;
+          width: 48%;
           flex-grow: 0;
           margin: 0;
 
@@ -179,7 +179,7 @@
 
         #address {
           display: none;
-          width: 250px;
+          width: 48%;
           flex-grow: 0;
           margin: 0;
         }

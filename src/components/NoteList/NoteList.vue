@@ -8,70 +8,42 @@
 </template>
 
 <script type="text/babel">
-import NoteItem from '@src/components/NoteItem/NoteItem';
-import EventsBus from '@src/services/EventsBus';
-import MessageFactory from '@src/components/ShowMessage/MessageFactory';
-import ShowMessage from '@src/components/ShowMessage/ShowMessage';
-import Axios from 'axios';
+  import NoteItem from '@src/components/NoteItem/NoteItem';
+  import EventsBus from '@src/services/EventsBus';
+  import MessageFactory from '@src/components/ShowMessage/MessageFactory';
+  import ShowMessage from '@src/components/ShowMessage/ShowMessage';
+  import Axios from 'axios';
 
-export default {
-  name: 'NoteList',
-  props: [
-    'expired',
-    'title',
-    'emptyMessage'
-  ],
-  data() {
-    return {
-      notes: [],
-      message: undefined
-    }
-  },
-  mounted () {
-
-    let self = this;
-
-    EventsBus.$on('NOTE_SAVED', function(note) {
-      if (note.expired === self.expired) {
-        console.log("NoteList: event received",  note);
-        self.getNotes(self.expired);
+  export default {
+    name: 'NoteList',
+    props: [
+      'notes',
+      'title',
+      'emptyMessage'
+    ],
+    data() {
+      return {
+        message: undefined
       }
-    });
-
-    EventsBus.$on('NOTE_DELETED', function(note) {
-      if (note.expired === self.expired) {
-        console.log("NoteList: event received",  note);
-        self.message = MessageFactory.getMessage("Note '" + note.title + "' removed.", MessageFactory.MESSAGE_CLASSES.success);
-        self.getNotes(self.expired);
-      }
-    });
-
-    this.getNotes(this.expired);
-
-  },
-  computed: {
-      haveNotes:  function() {
-        return this.notes.length > 0;
-      }
-  },
-  methods: {
-    getNotes(expired) {
+    },
+    mounted () {
 
       let self = this;
 
-      Axios.get("http://localhost:8080/notes/expired/" + expired)
-        .then((response) => {
-          self.notes = response.data;
-          console.log("NotebookApp: Data retrieved correctly.");
-        })
-        .catch((e) => {
-          console.log(e);
-        });
+      EventsBus.$on('NOTE_DELETED', function (note) {
+        console.log("NoteList: event received", note);
+        self.message = MessageFactory.getMessage("Note '" + note.title + "' removed.", MessageFactory.MESSAGE_CLASSES.success);
+      });
 
-    }
-  },
-  components: { NoteItem, ShowMessage }
-}
+    },
+    computed: {
+      haveNotes: function() {
+        return this.notes.length > 0;
+      }
+    },
+    methods: {},
+    components: {NoteItem, ShowMessage}
+  }
 </script>
 
 <style scoped lang="scss" rel="stylesheet/scss">
