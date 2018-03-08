@@ -1,6 +1,8 @@
 <template>
   <div class='Notebook'>
 
+    <div class="loader" :class="state"></div>
+
     <div class='Notebook__sidebar'>
       <overview-notes v-bind:notes="notesToCalendar"></overview-notes>
       <add-note></add-note>
@@ -26,6 +28,7 @@
     name: 'Notebook',
     data () {
       return {
+        state: 'loading',
         notes: [],
         notesExpired: [],
         notesToCalendar: []
@@ -61,11 +64,13 @@
         this.notesToCalendar = notesToCalendar.slice(0);
         console.log("Notebook: Notes to calendar calculated.", this.notesToCalendar);
         EventsBus.$emit(Entities.EventsNames.NOTES_LOADED);
+        this.state = 'ready';
 
       },
       getAllNotes() {
 
         let self = this;
+        self.state = 'loading';
         let httpRequests = [];
         httpRequests.push(Axios.get("http://localhost:8080/notes/expired/false"));
         httpRequests.push(Axios.get("http://localhost:8080/notes/expired/true"));

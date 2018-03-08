@@ -24,6 +24,8 @@
 
       <input type="button" value="Save" @click="addNote">
 
+      <show-message v-bind:message="message"></show-message>
+
     </div>
 
   </div>
@@ -38,11 +40,14 @@
   import MessageFactory from '@src/components/ShowMessage/MessageFactory';
   import FlatPickr from '@lib/vue-flatpickr-component/dist/vue-flatpickr.js';
   import '@lib/flatpickr/dist/flatpickr.css';
+  import ShowMessage from '@src/components/ShowMessage/ShowMessage';
 
   export default {
     name: 'AddNote',
     data () {
       return {
+        message: undefined,
+        state: 'loading',
         note: {},
         enableDate: false,
         enableAddress: false,
@@ -57,6 +62,7 @@
 
       this.enableDate = !!this.note.date;
       this.enableAddress = !!this.note.address;
+      this.state = 'ready';
 
     },
     watch: {
@@ -82,8 +88,10 @@
     methods: {
       addNote() {
 
+        this.state = 'loading';
+
         if (!this.note.title || this.note.title === "") {
-          EventsBus.$emit(Entities.EventsNames.ERROR, MessageFactory.getMessage("Field Title is not correct.", MessageFactory.MESSAGE_CLASSES.error));
+          this.message = MessageFactory.getMessage("Field Title is not correct.", MessageFactory.MESSAGE_CLASSES.error);
           return;
         }
 
@@ -92,12 +100,13 @@
         }
 
         if (this.enableAddress && (!this.note.address || this.note.address === "")) {
-          EventsBus.$emit(Entities.EventsNames.ERROR, MessageFactory.getMessage("Field Address is not correct.", MessageFactory.MESSAGE_CLASSES.error));
+          this.message = MessageFactory.getMessage("Field Address is not correct.", MessageFactory.MESSAGE_CLASSES.error);
           return;
         }
 
         Axios.post("http://localhost:8080/notes/note", this.note)
           .then((noteSaved) => {
+            this.state = 'ready';
             console.log("AddNote: Note saved correctly.", noteSaved.data);
             EventsBus.$emit(Entities.EventsNames.NOTE_SAVED, noteSaved.data, MessageFactory.getMessage("Note '" + noteSaved.data.title + "' created.", MessageFactory.MESSAGE_CLASSES.success));
           })
@@ -108,7 +117,7 @@
 
       }
     },
-    components: { FlatPickr }
+    components: { FlatPickr, ShowMessage }
   }
 </script>
 
