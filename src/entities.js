@@ -4,7 +4,8 @@ export default class Entities {
     ERROR: "ERROR",
     NOTE_SAVED: "NOTE_SAVED",
     NOTE_DELETED: "NOTE_DELETED",
-    NOTES_LOADED: "NOTES_LOADED"
+    NOTES_LOADED: "NOTES_LOADED",
+    DATE_SELECTED: "DATE_SELECTED"
   };
 
 }

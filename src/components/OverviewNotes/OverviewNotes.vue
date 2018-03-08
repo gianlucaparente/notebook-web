@@ -11,6 +11,7 @@
   import moment from '@lib/moment/moment.js';
   import Axios from 'axios';
   import EventsBus from '@src/services/EventsBus';
+  import Entities from '@src/entities.js';
 
   export default {
     name: 'OverviewNotes',
@@ -29,7 +30,7 @@
 
             let date = dayElem.dateObj;
 
-            // console.info("Create day: " + date);
+            console.info("Create day: " + date);
 
             self.notes.forEach(function (noteDate) {
 
@@ -48,6 +49,10 @@
                 d1.getDate() === d2.getDate();
             }
 
+          },
+          onChange: function(selectedDates, dateStr, instance) {
+            console.info("OverviewNotes: Select date: ", selectedDates[0]);
+            EventsBus.$emit(Entities.EventsNames.DATE_SELECTED, selectedDates[0]);
           }
         }
       }

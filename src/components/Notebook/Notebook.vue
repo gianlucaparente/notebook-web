@@ -47,6 +47,10 @@
           self.getNotes(note.expired);
         });
 
+      EventsBus.$on(Entities.EventsNames.DATE_SELECTED, function (dateSelected) {
+        self.getAllNotes(dateSelected);
+      });
+
       self.getAllNotes();
 
     },
@@ -67,13 +71,19 @@
         this.state = 'ready';
 
       },
-      getAllNotes() {
+      getAllNotes(dateSelected) {
 
         let self = this;
         self.state = 'loading';
         let httpRequests = [];
-        httpRequests.push(Axios.get("http://localhost:8080/notes/expired/false"));
-        httpRequests.push(Axios.get("http://localhost:8080/notes/expired/true"));
+
+        let params = "";
+        if (dateSelected) {
+          params += "/date/" + dateSelected.toISOString();
+        }
+
+        httpRequests.push(Axios.get("http://localhost:8080/notes/expired/false" + params));
+        httpRequests.push(Axios.get("http://localhost:8080/notes/expired/true" + params));
 
         Axios.all(httpRequests)
           .then(Axios.spread(function (notes, notesExpired) {
