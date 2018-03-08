@@ -44,52 +44,65 @@
           self.getNotes(note.expired);
         });
 
-      this.getNotes();
+      self.getAllNotes();
 
     },
     methods: {
-      getNotes(expired) {
+      calculateCalendarNotes(notes) {
 
-        this.notesToCalendar = [];
+        let notesToCalendar = [];
 
-        let httpRequests = [];
-        if (!!expired) {
-          httpRequests.push(Axios.get("http://localhost:8080/notes/expired/" + expired));
-        } else {
-          httpRequests.push(Axios.get("http://localhost:8080/notes/expired/false"));
-          httpRequests.push(Axios.get("http://localhost:8080/notes/expired/true"));
-        }
+        notes.forEach((note) => {
+          if (note.date) {
+            notesToCalendar.push(note.date);
+          }
+        });
+
+        this.notesToCalendar = notesToCalendar.slice(0);
+        console.log("Notebook: Notes to calendar calculated.", this.notesToCalendar);
+        EventsBus.$emit(Entities.EventsNames.NOTES_LOADED);
+
+      },
+      getAllNotes() {
 
         let self = this;
+        let httpRequests = [];
+        httpRequests.push(Axios.get("http://localhost:8080/notes/expired/false"));
+        httpRequests.push(Axios.get("http://localhost:8080/notes/expired/true"));
 
         Axios.all(httpRequests)
           .then(Axios.spread(function (notes, notesExpired) {
 
-            if (!!expired) {
+            self.notes = notes.data;
+            self.notesExpired = notesExpired.data;
+            console.log("Notebook: Data retrieved correctly.");
 
-              if (expired) {
-                self.notesExpired = notes.data;
-              } else {
-                self.notes = notes.data;
-              }
+            self.calculateCalendarNotes(self.notes.concat(self.notesExpired));
 
+          }))
+          .catch((e) => {
+            console.log(e);
+          });
+
+      },
+      getNotes(expired) {
+
+        let self = this;
+
+        Axios.get("http://localhost:8080/notes/expired/" + expired)
+          .then(function (notes) {
+
+            if (expired) {
+              self.notesExpired = notes.data;
             } else {
               self.notes = notes.data;
-              self.notesExpired = notesExpired.data;
             }
 
             console.log("Notebook: Data retrieved correctly.");
 
-            self.notes.concat(self.notesExpired).forEach(function (note) {
-              if (note.date) {
-                self.notesToCalendar.push(note.date);
-              }
-            });
+            self.calculateCalendarNotes(self.notes.concat(self.notesExpired));
 
-            console.log("Notebook: Notes to calendar calculated.");
-            EventsBus.$emit(Entities.EventsNames.NOTES_LOADED);
-
-          }))
+          })
           .catch((e) => {
             console.log(e);
           });

@@ -21,7 +21,6 @@
       let self = this;
       return {
         calendar: undefined,
-        dataReady: false,
         config: {
           inline: true,
           static: true,
@@ -30,10 +29,15 @@
 
             let date = dayElem.dateObj;
 
+            // console.info("Create day: " + date);
+
             self.notes.forEach(function (noteDate) {
+
+              // console.info("Check: " + date + " - " + new Date(noteDate) + " = " + sameDay(date, new Date(noteDate)));
 
               if (sameDay(date, new Date(noteDate))) {
                 dayElem.innerHTML += "<span class='flatpickr-event'></span>";
+                console.info("OverviewNotes: Add note to day: " + date);
               }
 
             });
@@ -49,20 +53,19 @@
       }
     },
     components: {},
-    mounted: function () {
+    mounted: function () {},
+    watch: {
+      notes: function(newNotes, oldNotes) {
 
-      let self = this;
-
-      EventsBus.$on('NOTES_LOADED', function () {
-
-        if (!self.calendar) {
-          self.calendar = flatpickr('#flatpickr', self.config);
+        if (!this.calendar) {
+          this.calendar = flatpickr('#flatpickr', this.config);
+          console.info("OverviewNotes: Overview calendar created.");
         } else {
-          self.calendar.redraw();
+          this.calendar.redraw();
+          console.info("OverviewNotes: Overview calendar redraw.");
         }
 
-      });
-
+      }
     },
     methods: {}
   }
