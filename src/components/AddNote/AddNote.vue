@@ -170,7 +170,6 @@
       &__address {
         display: flex;
         align-items: center;
-        -webkit-justify-content: center;
         height: 37px;
         margin-bottom: 10px;
 

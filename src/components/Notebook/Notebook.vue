@@ -129,6 +129,7 @@
       flex-grow: 0;
       flex-direction: column;
       margin-right: 10px;
+      width: 318px;
     }
 
     &__content {
