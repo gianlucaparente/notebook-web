@@ -30,7 +30,7 @@
 
             let date = dayElem.dateObj;
 
-            console.info("Create day: " + date);
+//            console.info("Create day: " + date);
 
             self.notes.forEach(function (noteDate) {
 

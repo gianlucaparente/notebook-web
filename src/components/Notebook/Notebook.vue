@@ -79,7 +79,7 @@
 
         let params = "";
         if (dateSelected) {
-          params += "/date/" + dateSelected.toISOString();
+          params += "/date/" + new Date(dateSelected.getTime() - (dateSelected.getTimezoneOffset() * 60000)).toISOString();
         }
 
         httpRequests.push(Axios.get("http://localhost:8080/notes/expired/false" + params));
