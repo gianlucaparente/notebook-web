@@ -1,6 +1,6 @@
 {
   "name": "notebook-web",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "description": "Safe notebook for your appoiments",
   "author": "Gianluca Parente <parente.gianluca@gmail.com>",
   "private": true,
