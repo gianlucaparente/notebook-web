@@ -7,8 +7,8 @@
     </div>
 
     <div class='Notebook__content'>
-      <note-list v-bind:expired='false' :title="'Your Notes:'" :empty-message="'You don\'t have notes.'"></note-list>
-      <note-list v-bind:expired='true' :title="'Expired Notes:'"></note-list>
+      <note-list v-bind:expired='false' :title="'Your Notes'" :empty-message="'You don\'t have notes.'"></note-list>
+      <note-list v-bind:expired='true' :title="'Expired Notes'"></note-list>
     </div>
 
   </div>

@@ -36,13 +36,15 @@
 
       let self = this;
 
-      EventsBus.$on(
-        [
-          Entities.EventsNames.NOTE_SAVED,
-          Entities.EventsNames.NOTE_DELETED
-        ], function (note, message) {
-          self.getNotes();
-        });
+      EventsBus.$on(Entities.EventsNames.NOTE_SAVED, function (note, message) {
+        self.calendar.setDate(note.date, true);
+        self.getNotes();
+      });
+
+      EventsBus.$on(Entities.EventsNames.NOTE_DELETED, function (note, message) {
+        self.calendar.setDate(self.calendar.selectedDates[0], true);
+        self.getNotes();
+      });
 
       this.getNotes();
     },

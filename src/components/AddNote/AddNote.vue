@@ -1,7 +1,7 @@
 <template>
   <div class='AddNote'>
 
-    <h2>Add Note:</h2>
+    <h2>Add Note</h2>
 
     <div class="AddNote__form form">
 
