@@ -4,7 +4,7 @@
     <div class="loader" :class="state"></div>
 
     <div class='Notebook__sidebar'>
-      <overview-notes v-bind:notes="notesToCalendar"></overview-notes>
+      <overview-notes></overview-notes>
       <add-note></add-note>
     </div>
 

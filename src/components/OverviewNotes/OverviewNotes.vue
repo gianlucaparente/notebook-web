@@ -15,64 +15,81 @@
 
   export default {
     name: 'OverviewNotes',
-    props: [
-      'notes'
-    ],
+    props: [],
     data () {
-      let self = this;
       return {
         calendar: undefined,
+        notes: [],
         config: {
           inline: true,
           static: true,
           altInputClass: "'flatPickrOverviewNotes'",
-          onDayCreate: function(dObj, dStr, fp, dayElem) {
-
-            let date = dayElem.dateObj;
-
-//            console.info("Create day: " + date);
-
-            self.notes.forEach(function (noteDate) {
-
-              // console.info("Check: " + date + " - " + new Date(noteDate) + " = " + sameDay(date, new Date(noteDate)));
-
-              if (sameDay(date, new Date(noteDate))) {
-                dayElem.innerHTML += "<span class='flatpickr-event'></span>";
-                console.info("OverviewNotes: Add note to day: " + date);
-              }
-
-            });
-
-            function sameDay(d1, d2) {
-              return d1.getFullYear() === d2.getFullYear() &&
-                d1.getMonth() === d2.getMonth() &&
-                d1.getDate() === d2.getDate();
-            }
-
-          },
-          onChange: function(selectedDates, dateStr, instance) {
-            console.info("OverviewNotes: Select date: ", selectedDates[0]);
-            EventsBus.$emit(Entities.EventsNames.DATE_SELECTED, selectedDates[0]);
-          }
+          onDayCreate: this.onDayCreate,
+          onChange: this.onChange
         }
-      }
+      };
     },
     components: {},
-    mounted: function () {},
-    watch: {
-      notes: function(newNotes, oldNotes) {
+    mounted: function () {
+      this.getAllNotes();
+    },
+    methods: {
+      getAllNotes() {
 
-        if (!this.calendar) {
-          this.calendar = flatpickr('#flatpickr', this.config);
-          console.info("OverviewNotes: Overview calendar created.");
-        } else {
-          this.calendar.redraw();
-          console.info("OverviewNotes: Overview calendar redraw.");
+        let self = this;
+        self.state = 'loading';
+
+        Axios.get("http://localhost:8080/notes")
+          .then((notes) => {
+
+            self.notes = notes.data;
+            console.log("OverviewNotes: Notes retrieved correctly.", self.notes);
+
+            if (!self.calendar) {
+              self.calendar = flatpickr('#flatpickr', self.config);
+              console.info("OverviewNotes: Overview calendar created.");
+            } else {
+              self.calendar.redraw();
+              console.info("OverviewNotes: Overview calendar redraw.");
+            }
+
+            self.state = 'ready';
+
+          })
+          .catch((e) => {
+            console.log(e);
+          });
+
+      },
+      onDayCreate(dObj, dStr, fp, dayElem) {
+
+        let date = dayElem.dateObj;
+
+        console.info("Create day: " + date);
+
+        this.notes.forEach(function (note) {
+
+          // console.info("Check: " + date + " - " + new Date(note.date) + " = " + sameDay(date, new Date(note.date)));
+
+          if (sameDay(date, new Date(note.date))) {
+            dayElem.innerHTML += "<span class='flatpickr-event'></span>";
+            console.info("OverviewNotes: Add note to day: " + date);
+          }
+
+        });
+
+        function sameDay(d1, d2) {
+          return d1.getFullYear() === d2.getFullYear() &&
+            d1.getMonth() === d2.getMonth() &&
+            d1.getDate() === d2.getDate();
         }
 
+      },
+      onChange(selectedDates, dateStr, instance) {
+        console.info("OverviewNotes: Select date: ", selectedDates[0]);
+        EventsBus.$emit(Entities.EventsNames.DATE_SELECTED, selectedDates[0]);
       }
-    },
-    methods: {}
+    }
   }
 </script>
 
