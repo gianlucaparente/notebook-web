@@ -3,15 +3,14 @@
 
     <div class="loader" :class="state"></div>
 
-    <h2>
+    <h2>{{ title }}</h2>
 
-      {{ title }}
-
-      <div class="NoteList__filters" v-if="haveFilters">
-        <div v-for="filter in filters" class="NoteList__filters__filter" v-bind:key='filter'>{{filter}}</div>
+    <div class="NoteList__filters" v-if="haveFilters">
+      <div v-for="filter in filters" class="NoteList__filters__filter" v-bind:key='filter.name' @click="removeFilter(filter)">
+        <icon name="remove"></icon>
+        <span>{{filter.value}}</span>
       </div>
-
-    </h2>
+    </div>
 
     <note-item v-if="haveNotes" v-for='note in notes' v-bind:note='note' v-bind:key='note.id'></note-item>
 
@@ -26,6 +25,8 @@
   import Axios from 'axios';
   import Entities from '@src/entities';
   import moment from '@lib/moment/moment.js';
+  import '@lib/vue-awesome/icons/remove';
+  import Icon from '@lib/vue-awesome/components/Icon';
 
   export default {
     name: 'NoteList',
@@ -61,6 +62,14 @@
       }
     },
     methods: {
+      removeFilter(filter) {
+
+        if (filter.name === "date") {
+          this.getNotes(this.expired);
+          EventsBus.$emit(Entities.EventsNames.FILTER_DATE_REMOVED);
+        }
+
+      },
       getNotes(expired, dateSelected) {
 
         let self = this;
@@ -70,12 +79,18 @@
         let params = "";
 
         if (expired !== undefined) {
-//          self.filters.push((expired) ? "expired" : "not expired");
+//          self.filters.push({
+//            name: "expired",
+//            value: (expired) ? "expired" : "not expired"
+//          });
           params += "/expired/" + expired;
         }
 
         if (dateSelected) {
-          self.filters.push("on " + moment(dateSelected).format("DD MMMM YYYY"));
+          self.filters.push({
+            name: "date",
+            value: moment(dateSelected).format("DD MMMM YYYY")
+          });
           params += "/date/" + new Date(dateSelected.getTime() - (dateSelected.getTimezoneOffset() * 60000)).toISOString();
         }
 
@@ -93,7 +108,7 @@
 
       }
     },
-    components: {NoteItem}
+    components: {NoteItem,Icon}
   }
 </script>
 
@@ -110,14 +125,25 @@
 
     &__filters {
       display: flex;
-      flex-direction: row-reverse;
-      position: absolute;
-      right: 0;
-      bottom: 0;
-      font-weight: normal;
+      margin-bottom: 10px;
 
       &__filter {
-        margin-left: 5px;
+        color: white;
+        background-color: #569ff7;
+        @include border-radius(20px);
+        margin: 0 5px;
+        border: 1px solid;
+        padding: 5px 15px;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        -webkit-justify-content: center;
+        justify-content: center;
+        cursor: pointer;
+
+        span {
+          margin-left: 5px;
+        }
       }
 
     }

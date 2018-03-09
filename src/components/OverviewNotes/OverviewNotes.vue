@@ -46,6 +46,11 @@
         self.getNotes();
       });
 
+      EventsBus.$on(Entities.EventsNames.FILTER_DATE_REMOVED, function () {
+        self.calendar.setDate(undefined);
+        self.getNotes();
+      });
+
       this.getNotes();
     },
     methods: {
