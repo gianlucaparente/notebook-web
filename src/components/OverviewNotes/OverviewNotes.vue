@@ -1,5 +1,6 @@
 <template>
   <div id="OverviewNotes" class='OverviewNotes'>
+    <div class="loader" :class="state"></div>
     <h2>Overview</h2>
     <div id="flatpickr"></div>
   </div>
@@ -18,6 +19,7 @@
     props: [],
     data () {
       return {
+        state: 'loading',
         calendar: undefined,
         notes: [],
         config: {
@@ -31,10 +33,21 @@
     },
     components: {},
     mounted: function () {
-      this.getAllNotes();
+
+      let self = this;
+
+      EventsBus.$on(
+        [
+          Entities.EventsNames.NOTE_SAVED,
+          Entities.EventsNames.NOTE_DELETED
+        ], function (note, message) {
+          self.getNotes();
+        });
+
+      this.getNotes();
     },
     methods: {
-      getAllNotes() {
+      getNotes() {
 
         let self = this;
         self.state = 'loading';
